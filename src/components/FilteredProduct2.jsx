@@ -18,9 +18,9 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -50,57 +50,54 @@ const subCategories = [
   { name: "Hip Bags", href: "#" },
   { name: "Laptop Sleeves", href: "#" },
 ];
-const filters = [
-  {
-    id: "color",
-    name: "Color",
-    options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: false },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "red", label: "Red", checked: false },
-      { value: "black", label: "Black", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "S", label: "S", checked: false },
-      { value: "M", label: "M", checked: false },
-      { value: "L", label: "L", checked: false },
-      { value: "XL", label: "XL", checked: false },
-      { value: "XXL", label: "XXL", checked: false },
-    ],
-  },
-  {
-    id: "price",
-    name: "Price",
-    options: [
-      { value: "200-400", label: " ₹200 - ₹400", checked: false },
-      { value: "400-600", label: " ₹400 - ₹600", checked: false },
-      { value: "600-1000", label: " ₹600 - ₹1000", checked: false },
-      { value: "1000-2000", label: " ₹1000 - ₹2000", checked: false },
-      {
-        value: "700-1.7976931348623157e+308",
-        label: " up to  ₹2000",
-        checked: false,
-      },
-    ],
-  },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function FilteredProduct2() {
+  const [filters, setFilters] = useState([
+    {
+      id: "color",
+      name: "Color",
+      options: [],
+    },
+    {
+      id: "size",
+      name: "Size",
+      options: [
+        { value: "S", label: "S", checked: false },
+        { value: "M", label: "M", checked: false },
+        { value: "L", label: "L", checked: false },
+        { value: "XL", label: "XL", checked: false },
+        { value: "XXL", label: "XXL", checked: false },
+      ],
+    },
+    {
+      id: "price",
+      name: "Price",
+      options: [
+        { value: "200-400", label: " ₹200 - ₹400", checked: false },
+        { value: "400-600", label: " ₹400 - ₹600", checked: false },
+        { value: "600-1000", label: " ₹600 - ₹1000", checked: false },
+        { value: "1000-2000", label: " ₹1000 - ₹2000", checked: false },
+        {
+          value: "700-1.7976931348623157e+308",
+          label: " up to  ₹2000",
+          checked: false,
+        },
+      ],
+    },
+  ]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const dispatch = useDispatch();
 
   const [selectedPriceRanges, setselectedPriceRanges] = useState([]);
   const [selectedsizeRanges, setselectedsizeRanges] = useState([]);
+  const [selectedcolorNames, setselectedcolorNames] = useState([]);
+
+const navigate=useNavigate()
 
   const handleChecked = async (e, sectionId) => {
     let { checked, value } = e.target;
@@ -130,20 +127,30 @@ export default function FilteredProduct2() {
       });
 
       console.log("size ranges1", selectedsizeRanges);
+    }else if(sectionId==="color"){
+      setselectedcolorNames((prevRanges) => {
+        if (checked) {
+          return [...prevRanges, value];
+        } else {
+          return prevRanges.filter((range) => range !== value);
+        }
+      });
     }
   };
 
   const filterRange = async () => {
     console.log("size ranges2", selectedsizeRanges);
+console.log('colorname',selectedcolorNames);
 
     let DataToSend = {
       priceRanges: selectedPriceRanges,
       sizeRanges: selectedsizeRanges,
+      colorName:selectedcolorNames
     };
     console.log("dataTosend", DataToSend);
     try {
       const { data } = await axios.post(
-        "https://clothophile.onrender.com/filter-products",
+        "http://localhost:3000/filter-products",
         DataToSend
       );
       dispatch(updateProducts({ data: data.AllProducts }));
@@ -174,19 +181,53 @@ export default function FilteredProduct2() {
       }
     });
   };
+  const filtersInitialized = useRef(false);
   const { products, loading, error } = useSelector((state) => state.products);
   useEffect(() => {
+   
     dispatch(fetchProducts());
     dispatch(fetchSellProducts());
     dispatch(fetchLatestProducts());
     dispatch(fetchHighToLowProducts());
   }, [dispatch]);
 
-  useEffect(() => {
+ 
+  useEffect(() => { 
+  
+
     filterRange();
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-  }, [selectedPriceRanges, selectedsizeRanges]);
+  }, [selectedPriceRanges, selectedsizeRanges,selectedcolorNames]);
+
+
+  useEffect(()=>{
+    if (!filtersInitialized.current &&products && products.length > 0) {
+      const uniqueColorNames = [
+        ...new Set(
+          products
+            .map((product) => product.colors.map((color) => color.colorName))
+            .flat()
+        ),
+      ];
+  
+      const options = uniqueColorNames.map((colorName) => ({
+        value: colorName.toLowerCase(),
+        label: colorName.charAt(0).toUpperCase() + colorName.slice(1),
+        checked: false,
+      }));
+  
+      // Update the filters state
+      setFilters((prevFilters) =>
+        prevFilters.map((filter) =>
+          filter.id === "color"
+            ? { ...filter, options }
+            : filter
+        )
+      );
+      filtersInitialized.current = true;
+    }
+  },[products])
   return (
     <div className="bg-white">
       <div>

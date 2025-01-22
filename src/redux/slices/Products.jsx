@@ -21,7 +21,7 @@ export const fetchProducts = createAsyncThunk(
     try {
     
       const { data } = await axios.get(
-        "https://clothophile.onrender.com/get-all-products"
+        "http://localhost:3000/get-all-products"
       );
 
      
@@ -42,7 +42,7 @@ export const fetchSellProducts = createAsyncThunk(
     try {
     
       const { data } = await axios.post(
-        "https://clothophile.onrender.com/filter-products",
+        "http://localhost:3000/filter-products",
         { discount: "yes", limit: 6 }
       );
     
@@ -63,7 +63,7 @@ export const fetchLatestProducts = createAsyncThunk(
     try {
     
       const { data } = await axios.post(
-        "https://clothophile.onrender.com/filter-products",
+        "http://localhost:3000/filter-products",
         { latest: "yes" }
       );
     
@@ -84,7 +84,7 @@ export const fetchProductDetails = createAsyncThunk(
     try {
     
       const { data } = await axios.post(
-        "https://clothophile.onrender.com/get-product-details",{slug}
+        "http://localhost:3000/get-product-details",{slug}
       );
     
       
@@ -103,7 +103,7 @@ export const fetchHighToLowProducts = createAsyncThunk(
     try {
     
       const { data } = await axios.post(
-        "https://clothophile.onrender.com/filter-products",
+        "http://localhost:3000/filter-products",
         { HighToLow: "yes" }
       );
     

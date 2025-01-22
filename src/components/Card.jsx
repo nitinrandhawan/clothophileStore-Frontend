@@ -4,9 +4,9 @@ function Card({image,heading,discount,price,className}) {
   return (
     
     <div className={`max-w-sm  bg-white shadow-md overflow-hidden ${className}`}>
-      <div>
+      <div className="overflow-hidden">
         <img
-          className={`object-cover object-center xl:h-[23.7rem] w-full lg:h-[18rem] md:h-[16.5rem] sm:h-[15rem] smaller1:h-[15rem] smallest:h-[15rem]`}
+          className={`object-cover object-center xl:h-[23.7rem] w-full lg:h-[18rem] md:h-[16.5rem] sm:h-[15rem] smaller1:h-[15rem] smallest:h-[15rem] hover:scale-105 ease-in-out duration-500`}
           src={image}
           alt="T-shirt"
         />
@@ -18,7 +18,7 @@ function Card({image,heading,discount,price,className}) {
         </h2>
       </div>
       <div className="flex items-center flex-col space-y-3 justify-around mt-4 pb-8">
-        <div className="flex justify-end gap-4">
+        {/* <div className="flex justify-end gap-4">
           <div className="flex">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -60,12 +60,14 @@ function Card({image,heading,discount,price,className}) {
           </div>
 
           <span className="text-slate-400 font-medium">3.7/5</span>
-        </div>
+        </div> */}
 
         <div className="flex space-x-2 justify-center items-center ">
           <span className="font-semibold text-gray-800 text-xl">₹{Math.floor((price - (discount * price) / 100)) }</span>
           <span className="font-semibold text-gray-400 line-through">₹{price}</span>
-          <span className="font-semibold text-red-600 ">{`(${discount}% OFF)`}</span>
+      {
+        discount ?<span className="font-semibold text-red-600 ">{`(${discount}% OFF)`}</span> : ""
+      }    
         </div>
       </div>
      

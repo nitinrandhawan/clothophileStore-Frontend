@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Card from "./Card";
 import { useSelector } from "react-redux";
 import Loading from "../utils/Loading.jsx";
+import 'aos/dist/aos.css'; 
+import AOS from 'aos';
 function HotSales() {
   const { discountedProducts } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    AOS.init({
+      offset: 200, 
+      duration: 1000,
+      easing: 'ease-in-out', 
+      delay: 100, 
+      once: true, 
+    });
+  }, []);
+  
   return (
     <>
       <div className="text-center p-10">
-        <h1 className="font-bold text-4xl mb-4 capitalize font-openSans max-md:text-3xl">
+        <h1   className="font-bold text-4xl mb-4 capitalize font-openSans max-md:text-3xl">
           Hot Sales{" "}
         </h1>
-        <h1 className="text-3xl font-openSans max-md:text-2xl">
+        <h1 data-aos="zoom-in" className="text-3xl font-openSans max-md:text-2xl ">
           ONLY FOR THIS MONTH
         </h1>
       </div>
@@ -23,8 +36,8 @@ function HotSales() {
             : "flex justify-center items-center"
         }`}
       >
-        {!discountedProducts ? (
-          <Loading className=" "/>
+        {!discountedProducts || discountedProducts.length===0 ? (
+          <Loading/>
         ) : (
           discountedProducts.map((product) => {
             return (
@@ -44,7 +57,7 @@ function HotSales() {
         )}
       </section>
       <div className="w-full flex items-center justify-center mb-4">
-        <Link to="/All-products">
+        <Link to="/filter-products">
           <button className="p-2 px-6 bg-red-500 text-white rounded-md hover:bg-red-600 ">
             View All
           </button>

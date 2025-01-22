@@ -8,7 +8,7 @@ function Footer() {
         <h2 className="font-bold text-3xl xl:text-4xl leading-snug">
         Discover Your Unique Style Today!  <br/>Unleash your fashion potential with our latest collection.
         </h2>
-        <Link  to="/All-products" className="mt-8 xl:mt-12 px-12 py-5 text-lg font-medium leading-tight inline-block bg-[#201f1f] rounded-full shadow-xl border border-transparent hover:bg-[#0a0a0a]  transition-all ease-in-out duration-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-sky-999 focus:ring-sky-500"
+        <Link  to="/filter-products" className="mt-8 xl:mt-12 px-12 py-5 text-lg font-medium leading-tight inline-block bg-[#201f1f] rounded-full shadow-xl border border-transparent hover:bg-[#0a0a0a]  transition-all ease-in-out duration-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-sky-999 focus:ring-sky-500"
             >Shop Now</Link>
         <div className="mt-14 xl:mt-16">
             <nav className="flex flex-wrap justify-center text-lg font-medium">

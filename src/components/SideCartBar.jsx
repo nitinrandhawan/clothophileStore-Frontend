@@ -3,20 +3,37 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { IoCloseCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AddToCart, GetCart, increaseCart } from "../redux/slices/Cart";
-const SideCartBar = ({ isCartOpen, setIsCartOpen }) => {
+import { AddToCart, closeCart, DeleteCart, GetCart, increaseCart, RemoveCart, toggleCart } from "../redux/slices/Cart";
+
+const SideCartBar = () => {
   const user_id = useSelector((state) => state.auth.token?.user_id);
-  const { cartData } = useSelector((state) => state.cart);
-  // const increaseQuantity = () => setQuantity(quantity + 1);
-  // const decreaseQuantity = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+  const { cartData,fullCartData } = useSelector((state) => state.cart);
+  
+
+  const isCartOpen=useSelector((state)=> state.cart.isCartOpen)
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const handleRemove = (slug, size) => {
+    dispatch(RemoveCart({ user_id, slug, size })).then(()=> dispatch(GetCart(user_id)))
+  
+  };
 
-  const increaseQuantity=({user_id,slug,size,quantity})=>{
-dispatch(AddToCart({user_id,slug,size,quantity}))
-  }
+  const handleAdd = (slug, size) => {
+    dispatch(AddToCart({ user_id, slug, size, quantity: 1 })).then(()=> dispatch(GetCart(user_id)))
+    
+  };
+const handleDelete=(slug,size)=>{
+dispatch(DeleteCart({user_id,slug,size})).then(()=> dispatch(GetCart(user_id)))
 
+}
+  
   const dispatch = useDispatch();
+//   const increaseQuantity=({user_id,slug,size,quantity})=>{
+// dispatch(AddToCart({user_id,slug,size,quantity}))
+//   }
+  
+  
   useEffect(() => {
+    
     dispatch(GetCart(user_id));
   }, []);
   return (
@@ -25,7 +42,7 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
       {isCartOpen && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-40 transition-opacity"
-          onClick={() => setIsCartOpen(!isCartOpen)}
+          onClick={()=>dispatch(toggleCart())}
         ></div>
       )}
 
@@ -39,7 +56,7 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold">My Shopping Cart</h2>
           <button
-            onClick={() => setIsCartOpen(!isCartOpen)}
+            onClick={()=>dispatch(closeCart())}
             className="text-black hover:text-gray-700 mr-2 flex items-center justify-center"
           >
             <IoCloseCircle className="text-2xl" />
@@ -62,7 +79,7 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
                   />
                   <div className="flex-grow ">
                     <h3 className="text-lg font-semibold">{cart.name}</h3>
-                    <p className="text-gray-600 mb-1">Rs. {cart.price}</p>
+                    <p className="text-gray-600 mb-1">Rs. {cart.discountedPrice}</p>
 
                     <p className="mb-1">
                       Size: <span className="text-gray-500">{cart.size}</span>
@@ -72,19 +89,19 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
                     </p>
                     <div className="flex items-center space-x-2 mt-3 gap-3">
                       <button
-                        // onClick={decreaseQuantity}
+                        onClick={()=>handleRemove(cart.slug,cart.size[0])}
                         className="px-2 border"
                       >
                         -
                       </button>
                       <span>{cart.quantity}</span>
                       <button
-                        onClick={()=>{increaseQuantity({user_id,slug: cart.slug,})}}
+                       onClick={()=>handleAdd(cart.slug,cart.size[0])}
                         className="px-2 border"
                       >
                         +
                       </button>
-                      <button>
+                      <button className="hover:text-red-500" onClick={()=>handleDelete(cart.slug,cart.size[0])}>
                         <RiDeleteBin5Line />
                       </button>
                     </div>
@@ -93,7 +110,7 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
               );
             })
           ) : (
-            <div>Your Cart is empty!!</div>
+            <div className="text-center my-5">Your Cart is empty!!</div>
           )}
         </div>
         {/* Order Instructions */}
@@ -102,7 +119,7 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
         <div className="p-4 relative bottom-0">
           <div className="flex justify-between items-center mb-4">
             <span className="font-semibold">Subtotal</span>
-            <span className="font-semibold">Rs. 2,000.00</span>
+            <span className="font-semibold">Rs. {fullCartData?.totalPrice ? fullCartData?.totalPrice : 0}</span>
           </div>
           <div className="flex items-center mb-4">
             <input
@@ -128,6 +145,7 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
               View Cart
             </button>
           </Link>{" "}
+          <Link to={`${agreeTerms ? "/checkout": ""}`}>
           <button
             className={`w-full py-3 ${
               agreeTerms
@@ -138,6 +156,8 @@ dispatch(AddToCart({user_id,slug,size,quantity}))
           >
             Checkout
           </button>
+          </Link>
+
         </div>
       </div>
     </>

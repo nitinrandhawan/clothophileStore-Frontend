@@ -10,10 +10,11 @@ import toast, { Toaster } from "react-hot-toast";
 import Loading from "../utils/Loading";
 import Footer from "./Footer";
 import SimilarProductsSlider from "./SimilarProductSlider";
+import { closeCart,  GetCart,  toggleCart } from "../redux/slices/Cart";
 import { AddToCart, increaseCart } from "../redux/slices/Cart";
 import SideCartBar from "./SideCartBar";
 
-const ProductDetails = () => {
+const ProductDetails2 = () => {
   let productDataStructure = {
     price: null,
     discountedPrice: null,
@@ -92,7 +93,8 @@ const ProductDetails = () => {
   ];
 
   const [tabContent, settabContent] = useState(tabContentStructure);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const isCartOpen=useSelector((state)=> state.cart.isCartOpen)
+
 
   const [activeTab, setActiveTab] = useState(0);
   const {
@@ -107,6 +109,11 @@ const ProductDetails = () => {
   } = useSelector((state) => state.products.productDetails);
 
   useEffect(() => {
+    if(user_id){
+
+      dispatch(GetCart(user_id))
+    }
+
     setProductData(productDataStructure);
     if (colors && colors[0] && colors.some((color) => color.slug === slug)) {
     
@@ -158,6 +165,7 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+
     if (image) setMainImage(image);
     else {
      console.log("loading..");
@@ -207,28 +215,28 @@ const ProductDetails = () => {
       <Toaster />
 
       <nav className="bg-white border-gray-200 py-4 sticky top-0 shadow-md max-md:shadow-sm z-50">
-        <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto max-smaller1:flex-col max-smaller1:justify-center">
+        <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto ">
           <Link to="/" className="flex items-center">
             <img
               src={logo}
               className="h-6 mr-3 sm:h-9 rounded-full"
               alt="Clothophile Logo"
             />
-            <span className="self-center text-xl font-semibold whitespace-nowrap font-openSans tracking-wider max-md:text-lg max-sm:text-sm ">
+            
+            <span className="self-center text-xl font-semibold whitespace-nowrap font-openSans tracking-wider max-md:text-lg max-sm:text-sm max-smallest1:text-[12px] ">
              ClothoPhile Store
             </span>
           </Link>
-          
-          <div className="flex items-center lg:order-2 gap-4">
+          <div className="flex items-center lg:order-2 gap-4 max-smaller1:gap-[2px]">
             <Link
               to="/search"
               className="text-black focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-2 lg:px-2 py-2 sm:mr-2 focus:outline-none"
             >
               <IoSearch className="font-light text-2xl max-md:text-xl" />
             </Link>
-            {/* <Link to={"/view-cart"} className="relative"> */}
-            <div className="relative cursor-pointer">
-              <FaCartShopping className="text-2xl max-md:text-lg" onClick={()=> setIsCartOpen((prev)=> !prev)}/>
+            <Link to={`${window.location.pathname==='/view-cart'? "/view-cart":"#"}`} className="relative">
+            <div className="relative cursor-pointer" onClick={()=> window.location.pathname==='/view-cart'? dispatch(closeCart()): dispatch(toggleCart())}>
+              <FaCartShopping className="text-2xl max-md:text-lg" />
               {cartItems > 0 && (
                 <span className="absolute -top-3 -right-[0.6rem] text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center max-md:text-[10px] max-md:w-3 max-md:h-3 max-md:-top-[0.4rem] max-md:-right-[0.4rem]">
                   {cartItems}
@@ -236,14 +244,11 @@ const ProductDetails = () => {
               )}
             </div>
 
-            {/* </Link> */}
+            </Link>
             {isCartOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-end">
-          <SideCartBar isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen}/>
+          <SideCartBar  />
         </div>
-        // <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-end">
-        //   <SideCartBar2 isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen}/>
-        // </div>
       )}
 
             {access_token ? (
@@ -294,7 +299,7 @@ const ProductDetails = () => {
               data-collapse-toggle="mobile-menu-2"
               type="button"
               onClick={handleNavBar}
-              className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="inline-flex items-center p-2 max-smaller1:p-0 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
               aria-controls="mobile-menu-2"
               aria-expanded="true"
             >
@@ -427,7 +432,7 @@ const ProductDetails = () => {
                     </span>
                     <span className="text-gray-500 line-through">₹{price}</span>
                   </div>
-                  <div className="flex items-center mb-4">
+                  {/* <div className="flex items-center mb-4">
                     {Array.from({ length: 5 }).map((_, index) => (
                       <svg
                         key={index}
@@ -446,7 +451,7 @@ const ProductDetails = () => {
                     <span className="ml-2 text-gray-600">
                       4.5 (120 reviews)
                     </span>
-                  </div>
+                  </div> */}
                   <div>
                     <h3 className="mb-2 font-semibold text-lg font-openSans">
                       Description:
@@ -606,4 +611,4 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetails2;

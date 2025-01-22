@@ -5,26 +5,30 @@ import CardSection2 from "../components/CardSection2";
 import Instagram from "../components/Instagram";
 import TrendySection from "../components/TrendySection";
 import { useDispatch } from "react-redux";
-import { fetchLatestProducts, fetchProducts, fetchSellProducts } from "../redux/slices/Products.jsx";
-
+import {
+  fetchLatestProducts,
+  fetchProducts,
+  fetchSellProducts,
+} from "../redux/slices/Products.jsx";
+import DiscountSection from "../components/DiscountSection.jsx";
+import { RevealTexts } from "../components/RevealTexts.jsx";
 
 function Home() {
- 
-
-  const dispatch=useDispatch()
-useEffect(()=>{
-dispatch(fetchSellProducts())
-dispatch(fetchProducts())
-dispatch(fetchLatestProducts())
-},[])
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchSellProducts());
+    dispatch(fetchProducts());
+    dispatch(fetchLatestProducts());
+  }, []);
   return (
     <div>
       <HeroSection />
       <HotSales />
-      <CardSection2 />
       <Instagram />
+      <DiscountSection/>
+      <CardSection2 />
+      {/* <RevealTexts/> */}
       {/* <TrendySection /> */}
-     
     </div>
   );
 }

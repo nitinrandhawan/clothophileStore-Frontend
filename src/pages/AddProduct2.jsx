@@ -252,7 +252,7 @@ function AddProduct2() {
 
   //     productloading = toast.loading("...adding product");
   //     console.log("submissionData", submissionData); // Check submissionData
-  //     await axios.post("https://clothophile.onrender.com/add-product", submissionData, {
+  //     await axios.post("http://localhost:3000/add-product", submissionData, {
   //       headers: {
   //         "Content-Type": "multipart/form-data",
   //       },
@@ -364,7 +364,7 @@ function AddProduct2() {
 
     try {
       const productloading = toast.loading("...adding product");
-      await axios.post("https://clothophile.onrender.com/add-product", submissionData, {
+      await axios.post("http://localhost:3000/add-product", submissionData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

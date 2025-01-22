@@ -70,13 +70,13 @@ export default function HeroSection() {
                       className={`w-full h-full object-cover object-center transition-transform duration-500 ease-out `}
                     />
                     <div className="absolute inset-0 flex flex-col justify-center items-center text-center bg-black bg-opacity-50 p-6">
-                      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-4">
+                      <h1 className="text-4xl max-smaller1:text-[24px] md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-4">
                         {image.title}
                       </h1>
                       <p className="text-lg md:text-xl lg:text-2xl text-white mb-6 max-w-3xl max-md:max-w-[25rem] max-sm:max-w-[17rem] max-smaller:max-w-[11.5rem]">
                         {image.description}
                       </p>
-                     <Link to="/All-Products">
+                     <Link to="/filter-products">
                      
                      <button className="bg-white text-black px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 max-md:text-sm">
                         Shop Now

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function AboutUs() {
   return (
@@ -20,7 +21,7 @@ function AboutUs() {
         </div>
         <div className='flex items-center justify-center'>
           <img
-            src="https://images.unsplash.com/photo-1560807707-8cc77767d783?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjbG90aGluZyUyMHN0b3JlfGVufDB8MHx8fDE2MzU0NjcyMDA&ixlib=rb-4.0.3&q=80&w=1080"
+            src="../src/assets/image/t-shirt4.jpg"
             alt="About Us"
             className="w-full h-72 object-cover rounded-lg shadow-md"
           />
@@ -49,9 +50,9 @@ function AboutUs() {
         <p className="text-gray-700 mb-4">
           We invite you to explore our latest collections, share your style with us on social media, and become a part of our growing community. Thank you for choosing <span className="font-semibold">ClothoPhile Store</span> as your fashion destination.
         </p>
-        <button className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition duration-300">
+       <Link to="/filter-products"> <button className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition duration-300">
           Shop Now
-        </button>
+        </button></Link>
       </div>
     </div>
   );

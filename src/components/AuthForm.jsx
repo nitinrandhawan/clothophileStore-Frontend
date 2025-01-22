@@ -54,7 +54,7 @@ function AuthForm({ type }) {
     try {
        Loading = toast.loading("Just a moment...");
       const { data } = await axios.post(
-        `https://clothophile.onrender.com/${type}`,
+        `http://localhost:3000/${type}`,
         FormData
       );
 

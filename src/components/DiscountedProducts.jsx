@@ -143,7 +143,7 @@ import {
       console.log("dataTosend", DataToSend);
       try {
         const { data } = await axios.post(
-          "https://clothophile.onrender.com/filter-products",
+          "http://localhost:3000/filter-products",
           DataToSend
         );
         dispatch(updateProducts({ data: data.AllProducts }));
